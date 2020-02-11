@@ -11,7 +11,8 @@ ui <- fluidPage(
   textInput('stock_symbol', 'Enter stock symbol: ', 'AAPL')),
   mainPanel(
   textOutput("symbol"),
-  plotOutput('trend'))
+  plotOutput('trend'),
+  plotOutput('volume'))
   )
 )
 server <- function(input, output){
@@ -23,5 +24,10 @@ server <- function(input, output){
      geom_line(aes(x = date, y = close)) +
      labs(y = 'stock price (dollars)')
  }) 
+ output$volume <- renderPlot({
+   ggplot(subset(all_stocks, Name == toupper(input$stock_symbol))) +
+     geom_line(aes(x = date, y = volume)) +
+     labs(y = 'stock volume')
+ })
 }
 shinyApp(ui = ui, server = server)
