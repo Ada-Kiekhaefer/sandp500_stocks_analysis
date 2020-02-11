@@ -36,8 +36,7 @@ returns <- (fin_values - ini_values)/ini_values
 preturns <- sum((fin_values - ini_values)/ini_values *weights)
 
 #creat dataframe of apple and microsoft stock
-aapl_df <- some_stocks %>%
-  filter(Name == c('AAPL')) %>%
+aapl_df <- some_stocks %>% filter(Name == c('AAPL')) %>%
   select(date, close) %>%
   rename(AAPL = close)
 
@@ -70,4 +69,18 @@ head(returns)
 
 # Remove the first row of returns
 returns <- returns[-1, ]    
+
+# Create the weights
+eq_weights <- c(0.5, 0.5)
+
+# Create a portfolio using buy and hold
+pf_bh <- Return.portfolio(R = returns, weights = eq_weights)
+
+# Create a portfolio rebalancing monthly 
+pf_rebal <- Return.portfolio(R = returns, rebalance_on = "months", weights = eq_weights)
+
+# Plot the time-series
+par(mfrow = c(2, 1), mar = c(2, 4, 2, 2))
+plot.zoo(pf_bh)
+plot.zoo(pf_rebal)
 
