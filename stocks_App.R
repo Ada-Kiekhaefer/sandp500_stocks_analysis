@@ -20,9 +20,14 @@ server <- function(input, output){
     paste(toupper(input$stock_symbol), 'stock time-series plot')
   })
  output$trend <- renderPlot({
-   ggplot(subset(all_stocks, Name == toupper(input$stock_symbol))) +
-     geom_line(aes(x = date, y = close)) +
-     labs(y = 'stock price (dollars)')
+   # ggplot(subset(all_stocks, Name == toupper(input$stock_symbol))) +
+   #   geom_line(aes(x = date, y = close)) +
+   #   labs(y = 'stock price (dollars)')
+   s_name <- all_stocks %>% 
+     filter(Name == toupper(input$stock_symbol))
+   ggplot(s_name) +
+   geom_line(aes(x = date, y = close)) +
+   labs(y = 'stock price (dollars)')
  }) 
  output$volume <- renderPlot({
    ggplot(subset(all_stocks, Name == toupper(input$stock_symbol))) +
